@@ -1,0 +1,3 @@
+[submodule "SuperFoodPiRepo"]
+	path = SuperFoodPiRepo
+	url = https://github.com/AdamBdamCdam/SuperFoodPiRepo.git
