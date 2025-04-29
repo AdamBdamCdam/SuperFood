@@ -1,9 +1,0 @@
-https://www.utmel.com/components/ov7670-camera-module-datasheet-specifications-and-comparison?id=797
-OV7670
-Photosensitive Array: 640 x 480
-Operating Power: 60mW/15fpsVGAYUV.
-Sleeping Mode: <20μA.
-Pixel Coverage: 3.6μm x 3.6μm.
-
-
-
