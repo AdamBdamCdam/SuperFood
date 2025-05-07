@@ -1,3 +1,5 @@
+#include <itu-student-avad-project-1_inferencing.h>
+
 /*
   OV767X - Camera Test Pattern
 
@@ -44,47 +46,42 @@ void setup() {
   Serial.begin(9600);
   while (!Serial);
   T = 64;
-  Serial.println("OV767X Camera Capture");
-  Serial.println();
-
+  
   if (!Camera.begin(QCIF, RGB565, 1)) {
     Serial.println("Failed to initialize camera!");
     while (1);
   }
-
-  Serial.println("Camera settings:");
-  Serial.print("\twidth = ");
-  Serial.println(Camera.width());
-  Serial.print("\theight = ");
-  Serial.println(Camera.height());
-  Serial.print("\tbits per pixel = ");
-  Serial.println(Camera.bitsPerPixel());
-  Serial.println();
-
-  Serial.println("Send the 'c' character to read a frame ...");
-  Serial.println();
   numPixels = Camera.width() * Camera.height();
 }
 
 void loop() {
-  if (Serial.read() == 'c') {
-    Serial.println("Reading frame");
-    Serial.println();
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(1000);                    
+  digitalWrite(LED_BUILTIN, LOW); 
+
+  delay(2000);
+//    Serial.println("Reading frame");
+//    Serial.println();
     Camera.readFrame(pixels);
-    output_img(pixels);
+    //output_img(pixels);
 
     for (int i = 0; i < numPixels; i++) {
       unsigned short p = pixels[i];
       pixels[i] = how_green(p);
     }
     
-    output_img(pixels);
+    //output_img(pixels);
     
     for (int i = 0; i < numPixels; i++) {
       unsigned short p = pixels[i];
       pixels[i] = p > T ? 65535 : 0;
     }
+
+    
     output_img(pixels);
+    digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+    delay(1000);                       // wait for a second
+    digitalWrite(LED_BUILTIN, LOW); 
   }
 }
 
@@ -92,9 +89,9 @@ unsigned short how_green(unsigned short pixel){
   uint8_t r = ((pixel >> 10) & 0x3E); // the same as ((pixel >> 11) & 0x1F)*2
   uint8_t g = (pixel >> 5) & 0x3F;
   uint8_t b = (pixel & 0x1F) << 1;
-  
-  uint8_t c = sqrt(b*b+r*r);
-  return 2*g > c ? 2*g-c : 0; //skal lige finetunes
+
+  uint8_t c = b < r ? b : r;
+  return g > c ? g-c : 0;
 }
 
 void output_img(unsigned short pixels[]){
